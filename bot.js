@@ -3,7 +3,7 @@ var Discord = require("discord.js"),
     request = require("request"),
     cheerio = require("cheerio");
 
-var bot = new Discord.Client();
+var bot = new Discord.Client({autoReconnect: true});
 var recipeURL = 'http://www.random-recipes.com/index.php?page=index&filter=true';
 
 function getWebContent(url, callback) {
@@ -27,7 +27,7 @@ bot.on("message", function(message) {
                 servings = $('.stats-td-right').eq(2).text().trim(),
                 linkURL = 'http://www.random-recipes.com/' + $(".recipe-name").attr('href');
 
-            bot.sendMessage(message, 'What about "' + name + '"? \n' + linkURL + '\n' +
+            message.channel.sendMessage('What about "' + name + '"? \n' + linkURL + '\n' +
                 '⚒ ' + prepTime + ' prep time' + '\n' +
                 '  ' + cookTime + ' cook time' + '\n' +
                 '  ' + servings + ' servings' + '\n' +
@@ -36,5 +36,5 @@ bot.on("message", function(message) {
     }
 });
 
-bot.loginWithToken(config.token);
+bot.login(config.token);
 
